@@ -190,7 +190,7 @@ jobs:
             $(curl -s -X POST -H "Content-Type: application/json" -d '{"packagename":"com.tencent.mobileqq"}' \
             https://upage.html5.qq.com/wechat-apkinfo | tr -cd '[:print:]' | jq -r '.app_detail_records."com.tencent.mobileqq".apk_all_data.url')
 
-      # 下载 NPatch
+          # 下载 NPatch
       - name: Download NPatch | 下载 NPatch
         run: |
             gh release download -O npatch.jar --repo "7723mod/NPatch" --pattern '*.jar'
