@@ -4,10 +4,10 @@
 
 # [LSPatch]
 LSPatch:
-  repo: "JingMatrix/LSPatch"
+  repo: "7723mod/NPatch"
 # 选择使用的 LSPatch 项目（需在 releases 中提供 .jar 文件）
-# JingMatrix 维护的 LSPatch 分支已适配 Android 15/16/17，核心直接跟踪 JingMatrix/Vector
-# 若在高版本遇到兼容性问题可考虑使用 NPatch（7723mod/NPatch，核心 HSSkyBoy/Vector）
+# JingMatrix 维护的 LSPatch 分支已适配 Android 15，若在高版本遇到兼容性问题可考虑使用
+# 将官方仓库 "LSPosed/LSPatch" 更改为 "JingMatrix/LSPatch" 即可（使用该分支产生的后果请自负）
 
 # [模块]
 modules:
@@ -51,4 +51,4 @@ QQ:
 # 修补设置
 # -----------------
 force:
-  enable: true # 选择是否每次执行时均进行修补，忽略版本更新检查（不推荐长期开启）
+  enable: false # 选择是否每次执行时均进行修补，忽略版本更新检查（不推荐长期开启）
