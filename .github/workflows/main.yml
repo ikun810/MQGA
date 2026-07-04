@@ -193,7 +193,7 @@ jobs:
       # 下载 NPatch
       - name: Download NPatch | 下载 NPatch
         run: |
-            gh release download -O npatch.jar --repo "7723mod/NPatch" --pattern '*.jar'
+          gh release download -O npatch.jar --repo "7723mod/NPatch" --pattern '*.jar'
           fi
 
       - name: Download Preset Modules | 下载预设模块
