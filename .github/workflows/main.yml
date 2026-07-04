@@ -267,7 +267,7 @@ jobs:
           echo "module_list=$module_list" >> $GITHUB_OUTPUT
 
           # 执行修补
-          java -jar NPatch.jar QQ-*.apk -m "$module_list" -l 2
+          java -jar npatch.jar QQ-*.apk -m "$module_list" -l 2
 
       - name: Create Release | 创建 Release
         uses: softprops/action-gh-release@v2
