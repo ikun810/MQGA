@@ -1,0 +1,5 @@
+# Only Funbox.apk is tracked (local override for newer version)
+# Other modules come from gh release download at runtime
+*
+!Funbox.apk
+!.gitignore

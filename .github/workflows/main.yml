@@ -235,7 +235,7 @@ jobs:
             gh release download -O QStory.apk --repo Xposed-Modules-Repo/lin.xposed --pattern 'QStory_*-release.apk'
           fi
           if [ "${{ env.MODULES_FUNBOX }}" = "true" ]; then
-            gh release download -O Funbox.apk --repo Xposed-Modules-Repo/have.fun --pattern 'FunBox_*.[Aa]pk'
+            cp modules/Funbox.apk Funbox.apk
           fi
           if [ "${{ env.MODULES_QFUN }}" = "true" ]; then
             gh release download -O QFun.apk --repo Xposed-Modules-Repo/me.yxp.qfun --pattern 'QFun_*.apk'
