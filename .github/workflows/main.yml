@@ -270,20 +270,22 @@ jobs:
         run: |
           # 动态生成模块列表
           module_list=""
+          module_args=""
           
           # 添加预设模块
-          if [ "${{ env.MODULES_QAUXILIARY }}" = "true" ]; then module_list="${module_list},QAuxiliary.apk"; fi
-          if [ "${{ env.MODULES_XAUTODAILY }}" = "true" ]; then module_list="${module_list},XAutoDaily.apk"; fi
-          if [ "${{ env.MODULES_NTQQBATTERY }}" = "true" ]; then module_list="${module_list},NTQQBattery.apk"; fi
-          if [ "${{ env.MODULES_QSTORY }}" = "true" ]; then module_list="${module_list},QStory.apk"; fi
-          if [ "${{ env.MODULES_FUNBOX }}" = "true" ]; then module_list="${module_list},Funbox.apk"; fi
-          if [ "${{ env.MODULES_QFUN }}" = "true" ]; then module_list="${module_list},QFun.apk"; fi
+          if [ "${{ env.MODULES_QAUXILIARY }}" = "true" ]; then module_list="${module_list},QAuxiliary.apk"; module_args="${module_args} -m QAuxiliary.apk"; fi
+          if [ "${{ env.MODULES_XAUTODAILY }}" = "true" ]; then module_list="${module_list},XAutoDaily.apk"; module_args="${module_args} -m XAutoDaily.apk"; fi
+          if [ "${{ env.MODULES_NTQQBATTERY }}" = "true" ]; then module_list="${module_list},NTQQBattery.apk"; module_args="${module_args} -m NTQQBattery.apk"; fi
+          if [ "${{ env.MODULES_QSTORY }}" = "true" ]; then module_list="${module_list},QStory.apk"; module_args="${module_args} -m QStory.apk"; fi
+          if [ "${{ env.MODULES_FUNBOX }}" = "true" ]; then module_list="${module_list},Funbox.apk"; module_args="${module_args} -m Funbox.apk"; fi
+          if [ "${{ env.MODULES_QFUN }}" = "true" ]; then module_list="${module_list},QFun.apk"; module_args="${module_args} -m QFun.apk"; fi
           
           # 添加自定义模块
           if [ "${{ env.MODULES_CUSTOM_ENABLE }}" = "true" ]; then
             for file in custom-module-*.apk; do
               if [ -f "$file" ]; then
                 module_list="${module_list},$file"
+                module_args="${module_args} -m $file"
               fi
             done
           fi
@@ -295,11 +297,13 @@ jobs:
             echo "::warning::No modules selected for patching | 未选择任何模块进行修补"
           fi
           echo "模块列表: $module_list"
+          echo "模块参数: $module_args"
           # 输出到 GITHUB_OUTPUT
           echo "module_list=$module_list" >> $GITHUB_OUTPUT
 
-          # 执行修补
-          java -jar npatch.jar QQ-*.apk -m "$module_list" -l 2
+          # 执行修补（NPatch v1.0.5+ 每个 -m 只接单个模块，需重复 flag）
+          # shellcheck disable=SC2086
+          java -jar npatch.jar QQ-*.apk $module_args -l 2
 
       - name: Create Release | 创建 Release
         uses: softprops/action-gh-release@v2
