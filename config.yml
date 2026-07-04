@@ -13,17 +13,17 @@ LSPatch:
 modules:
   # --- 预设模块 ---
   # 将值设为 true 来启用模块，设为 false 则禁用
-  QAuxiliary: true
+  QAuxiliary: false
   XAutoDaily: true
-  TSBattery: true
-  QQCleaner: true
+  NTQQBattery: true
+  QStory: true
+  Funbox: true
+  QFun: true
 
   # --- 自定义模块 ---
   custom:
     enable: false # 是否启用自定义模块下载，默认禁用
     list:
-    - name: "QStory" # 示例：QStory
-      download_link: "https://qstory.sacz.top/update/download"
   # - name: "模块名称"
   #   download_link: "下载链接"
   # 参考上述模板即可添加多个自定义模块（注意对齐空格）

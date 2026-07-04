@@ -31,14 +31,18 @@ jobs:
       QQ_version: ${{ steps.get_qq_version.outputs.QQ_version }}
       QAuxiliary_version: ${{ steps.QAuxiliary.outputs.release }}
       XAutoDaily_version: ${{ steps.XAutoDaily.outputs.release }}
-      TSBattery_version: ${{ steps.TSBattery.outputs.release }}
-      QQCleaner_version: ${{ steps.QQCleaner.outputs.release }}
+      NTQQBattery_version: ${{ steps.NTQQBattery.outputs.release }}
+      QStory_version: ${{ steps.QStory.outputs.release }}
+      Funbox_version: ${{ steps.Funbox.outputs.release }}
+      QFun_version: ${{ steps.QFun.outputs.release }}
       LSPatch_version: ${{ steps.LSPatch.outputs.release }}
 
       QAuxiliary_description: ${{ steps.QAuxiliary.outputs.description }}
       XAutoDaily_description: ${{ steps.XAutoDaily.outputs.description }}
-      TSBattery_description: ${{ steps.TSBattery.outputs.description }}
-      QQCleaner_description: ${{ steps.QQCleaner.outputs.description }}
+      NTQQBattery_description: ${{ steps.NTQQBattery.outputs.description }}
+      QStory_description: ${{ steps.QStory.outputs.description }}
+      Funbox_description: ${{ steps.Funbox.outputs.description }}
+      QFun_description: ${{ steps.QFun.outputs.description }}
 
     steps:
       - name: Checkout | 检出代码
@@ -66,19 +70,35 @@ jobs:
           excludes: prerelease, draft
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get TSBattery version | 获取 TSBattery 版本
-        id: TSBattery
+      - name: Get NTQQBattery version | 获取 NTQQBattery 版本
+        id: NTQQBattery
         uses: pozetroninc/github-action-get-latest-release@v0.8.0
         with:
-          repository: fankes/TSBattery
+          repository: wkeqin/ntqqbattery
           excludes: prerelease, draft
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get QQCleaner version | 获取 QQCleaner 版本
-        id: QQCleaner
+      - name: Get QStory version | 获取 QStory 版本
+        id: QStory
         uses: pozetroninc/github-action-get-latest-release@v0.8.0
         with:
-          repository: KitsunePie/QQCleaner
+          repository: Xposed-Modules-Repo/lin.xposed
+          excludes: prerelease, draft
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Funbox version | 获取 Funbox 版本
+        id: Funbox
+        uses: pozetroninc/github-action-get-latest-release@v0.8.0
+        with:
+          repository: Xposed-Modules-Repo/have.fun
+          excludes: prerelease, draft
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get QFun version | 获取 QFun 版本
+        id: QFun
+        uses: pozetroninc/github-action-get-latest-release@v0.8.0
+        with:
+          repository: Xposed-Modules-Repo/me.yxp.qfun
           excludes: prerelease, draft
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -111,15 +131,19 @@ jobs:
             --arg QQ_version "${{ steps.get_qq_version.outputs.QQ_version }}" \
             --arg QAuxiliary_version "${{ steps.QAuxiliary.outputs.release }}" \
             --arg XAutoDaily_version "${{ steps.XAutoDaily.outputs.release }}" \
-            --arg TSBattery_version "${{ steps.TSBattery.outputs.release }}" \
-            --arg QQCleaner_version "${{ steps.QQCleaner.outputs.release }}" \
+            --arg NTQQBattery_version "${{ steps.NTQQBattery.outputs.release }}" \
+            --arg QStory_version "${{ steps.QStory.outputs.release }}" \
+            --arg Funbox_version "${{ steps.Funbox.outputs.release }}" \
+            --arg QFun_version "${{ steps.QFun.outputs.release }}" \
             --arg LSPatch_version "${{ steps.LSPatch.outputs.release }}" \
             '{
               QQ: $QQ_version,
               QAuxiliary: $QAuxiliary_version,
               XAutoDaily: $XAutoDaily_version,
-              TSBattery: $TSBattery_version,
-              QQCleaner: $QQCleaner_version,
+              NTQQBattery: $NTQQBattery_version,
+              QStory: $QStory_version,
+              Funbox: $Funbox_version,
+              QFun: $QFun_version,
               LSPatch: $LSPatch_version
             }')
 
@@ -204,11 +228,17 @@ jobs:
           if [ "${{ env.MODULES_XAUTODAILY }}" = "true" ]; then
             gh release download -O XAutoDaily.apk --repo LuckyPray/XAutoDaily --pattern '*.apk'
           fi
-          if [ "${{ env.MODULES_TSBATTERY }}" = "true" ]; then
-            gh release download -O TSBattery.apk --repo fankes/TSBattery --pattern '*.apk'
+          if [ "${{ env.MODULES_NTQQBATTERY }}" = "true" ]; then
+            gh release download -O NTQQBattery.apk --repo wkeqin/ntqqbattery --pattern 'NTQQBattery-*[0-9].apk'
           fi
-          if [ "${{ env.MODULES_QQCLEANER }}" = "true" ]; then
-            gh release download -O QQCleaner.apk --repo KitsunePie/QQCleaner --pattern '*.apk'
+          if [ "${{ env.MODULES_QSTORY }}" = "true" ]; then
+            gh release download -O QStory.apk --repo Xposed-Modules-Repo/lin.xposed --pattern 'QStory_*-release.apk'
+          fi
+          if [ "${{ env.MODULES_FUNBOX }}" = "true" ]; then
+            gh release download -O Funbox.apk --repo Xposed-Modules-Repo/have.fun --pattern 'FunBox_*.[Aa]pk'
+          fi
+          if [ "${{ env.MODULES_QFUN }}" = "true" ]; then
+            gh release download -O QFun.apk --repo Xposed-Modules-Repo/me.yxp.qfun --pattern 'QFun_*.apk'
           fi
 
       - name: Download Custom Modules | 下载自定义模块
@@ -244,8 +274,10 @@ jobs:
           # 添加预设模块
           if [ "${{ env.MODULES_QAUXILIARY }}" = "true" ]; then module_list="${module_list},QAuxiliary.apk"; fi
           if [ "${{ env.MODULES_XAUTODAILY }}" = "true" ]; then module_list="${module_list},XAutoDaily.apk"; fi
-          if [ "${{ env.MODULES_TSBATTERY }}" = "true" ]; then module_list="${module_list},TSBattery.apk"; fi
-          if [ "${{ env.MODULES_QQCLEANER }}" = "true" ]; then module_list="${module_list},QQCleaner.apk"; fi
+          if [ "${{ env.MODULES_NTQQBATTERY }}" = "true" ]; then module_list="${module_list},NTQQBattery.apk"; fi
+          if [ "${{ env.MODULES_QSTORY }}" = "true" ]; then module_list="${module_list},QStory.apk"; fi
+          if [ "${{ env.MODULES_FUNBOX }}" = "true" ]; then module_list="${module_list},Funbox.apk"; fi
+          if [ "${{ env.MODULES_QFUN }}" = "true" ]; then module_list="${module_list},QFun.apk"; fi
           
           # 添加自定义模块
           if [ "${{ env.MODULES_CUSTOM_ENABLE }}" = "true" ]; then
@@ -284,22 +316,28 @@ jobs:
             ### 所有默认配置项目的最新版本
             | 项目名称 | 对应版本 | 查看项目 |
             | ------- | -------- | ------- |
-            | QQ 最新版本 | ${{ needs.check-updates.outputs.QQ_version }}         | [QQ 官网](https://im.qq.com/index) |
+            | QQ 最新版本 | ${{ needs.check-updates.outputs.QQ_version }}     | [QQ 官网](https://im.qq.com/index) |
             | QAuxiliary | ${{ needs.check-updates.outputs.QAuxiliary_version }} | [GitHub](https://github.com/cinit/QAuxiliary) |
             | XAutoDaily | ${{ needs.check-updates.outputs.XAutoDaily_version }} | [GitHub](https://github.com/LuckyPray/XAutoDaily) |
-            | TSBattery  | ${{ needs.check-updates.outputs.TSBattery_version }}  | [GitHub](https://github.com/fankes/TSBattery) |
-            | QQCleaner  | ${{ needs.check-updates.outputs.QQCleaner_version }}  | [GitHub](https://github.com/KitsunePie/QQCleaner) |
-            | LSPatch    | ${{ needs.check-updates.outputs.LSPatch_version }}    | [GitHub](https://github.com/${{ ENV.LSPATCH_REPO }}) |
+            | NTQQBattery | ${{ needs.check-updates.outputs.NTQQBattery_version }} | [GitHub](https://github.com/wkeqin/ntqqbattery) |
+            | QStory | ${{ needs.check-updates.outputs.QStory_version }} | [GitHub](https://github.com/Xposed-Modules-Repo/lin.xposed) |
+            | Funbox | ${{ needs.check-updates.outputs.Funbox_version }} | [GitHub](https://github.com/Xposed-Modules-Repo/have.fun) |
+            | QFun | ${{ needs.check-updates.outputs.QFun_version }} | [GitHub](https://github.com/Xposed-Modules-Repo/me.yxp.qfun) |
+            | LSPatch | ${{ needs.check-updates.outputs.LSPatch_version }}    | [GitHub](https://github.com/${{ ENV.LSPATCH_REPO }}) |
 
             <details><summary>点击展开模块更新日志</summary>
             #### QAuxiliary<br>
             ${{ needs.check-updates.outputs.QAuxiliary_description }}
             #### XAutoDaily<br>
             ${{ needs.check-updates.outputs.XAutoDaily_description }}
-            #### TSBattery<br>
-            ${{ needs.check-updates.outputs.TSBattery_description }}
-            #### QQCleaner<br>
-            ${{ needs.check-updates.outputs.QQCleaner_description }}
+            #### NTQQBattery<br>
+            ${{ needs.check-updates.outputs.NTQQBattery_description }}
+            #### QStory<br>
+            ${{ needs.check-updates.outputs.QStory_description }}
+            #### Funbox<br>
+            ${{ needs.check-updates.outputs.Funbox_description }}
+            #### QFun<br>
+            ${{ needs.check-updates.outputs.QFun_description }}
             </details>
 
             ### 发行说明
