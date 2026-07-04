@@ -308,9 +308,9 @@ jobs:
           echo "module_list=$module_list" >> $GITHUB_OUTPUT
 
           # 执行修补（NPatch v1.0.5+：-m/--embed 每个接单个模块需重复；target apk 放最后）
-          echo "::notice::Running: java -jar npatch.jar $module_args QQ-*.apk -l 2"
+          echo "::notice::Running: java -jar npatch.jar -fpa $module_args QQ-*.apk -l 2"
           # shellcheck disable=SC2086
-          java -jar npatch.jar $module_args QQ-*.apk -l 2
+          java -jar npatch.jar -fpa $module_args QQ-*.apk -l 2
 
       - name: Create Release | 创建 Release
         uses: softprops/action-gh-release@v2
