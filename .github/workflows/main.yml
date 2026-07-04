@@ -190,13 +190,10 @@ jobs:
             $(curl -s -X POST -H "Content-Type: application/json" -d '{"packagename":"com.tencent.mobileqq"}' \
             https://upage.html5.qq.com/wechat-apkinfo | tr -cd '[:print:]' | jq -r '.app_detail_records."com.tencent.mobileqq".apk_all_data.url')
 
-      # 下载 LSPatch
-      - name: Download LSPatch | 下载 LSPatch
+      # 下载 NPatch
+      - name: Download NPatch | 下载 NPatch
         run: |
-          if [ "${{ env.LSPATCH_REPO }}" = "JingMatrix/LSPatch" ]; then
-            gh release download -O LSPatch.jar --repo "JingMatrix/LSPatch" --pattern 'lspatch.jar'
-          else
-            gh release download -O LSPatch.jar --repo "${{ env.LSPATCH_REPO }}" --pattern '*.jar'
+            gh release download -O npatch.jar --repo "7723mod/NPatch" --pattern '*.jar'
           fi
 
       - name: Download Preset Modules | 下载预设模块
@@ -271,13 +268,13 @@ jobs:
           echo "module_list=$module_list" >> $GITHUB_OUTPUT
 
           # 执行修补
-          java -jar LSPatch.jar QQ-*.apk -m "$module_list" -l 2
+          java -jar NPatch.jar QQ-*.apk -m "$module_list" -l 2
 
       - name: Create Release | 创建 Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            *-lspatched.apk
+            *-npatched.apk
             versions.json
           tag_name: Build#${{ github.run_number }} # 仓库中特定工作流程每个运行的唯一编号（从 1 开始递增）
           name: "QQ Build #${{ github.run_number }} (with ${{ needs.check-updates.outputs.QQ_version }})" # 使用 QQ 版本号和构建编号作为标题
