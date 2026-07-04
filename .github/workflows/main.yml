@@ -214,10 +214,10 @@ jobs:
             $(curl -s -X POST -H "Content-Type: application/json" -d '{"packagename":"com.tencent.mobileqq"}' \
             https://upage.html5.qq.com/wechat-apkinfo | tr -cd '[:print:]' | jq -r '.app_detail_records."com.tencent.mobileqq".apk_all_data.url')
 
-      # 下载 NPatch
-      - name: Download NPatch | 下载 NPatch
+      # 下载 LSPatch
+      - name: Download LSPatch | 下载 LSPatch
         run: |
-          gh release download -O npatch.jar --repo "7723mod/NPatch" --pattern '*.jar'
+          gh release download -O lspatch.jar --repo "${{ ENV.LSPATCH_REPO }}" --pattern '*.jar' --clobber
 
       - name: Download Preset Modules | 下载预设模块
         run: |
@@ -307,17 +307,17 @@ jobs:
           # 输出到 GITHUB_OUTPUT
           echo "module_list=$module_list" >> $GITHUB_OUTPUT
 
-          # 执行修补（NPatch v1.0.5+：-m/--embed 每个接单个模块需重复；target apk 放最后）
-          # 注册 BouncyCastle provider（NPatch 内建密钥库需 BKS，Temurin JDK 默认无 BC）
-          echo "::notice::Running: java -Djava.security.properties=npatch-bc.security -jar npatch.jar -fpa $module_args QQ-*.apk -l 2"
+          # 执行修补（LSPatch：-m/--embed 每个接单个模块需重复；target apk 放最后）
+          # 注册 BouncyCastle provider（保险：内建密钥库可能需 BKS，Temurin JDK 默认无 BC）
+          echo "::notice::Running: java -Djava.security.properties=npatch-bc.security -jar lspatch.jar $module_args QQ-*.apk -l 2"
           # shellcheck disable=SC2086
-          java -Djava.security.properties=npatch-bc.security -jar npatch.jar -fpa $module_args QQ-*.apk -l 2
+          java -Djava.security.properties=npatch-bc.security -jar lspatch.jar $module_args QQ-*.apk -l 2
 
       - name: Create Release | 创建 Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            *-npatched.apk
+            *-lspatched.apk
             versions.json
           tag_name: Build#${{ github.run_number }} # 仓库中特定工作流程每个运行的唯一编号（从 1 开始递增）
           name: "QQ Build #${{ github.run_number }} (with ${{ needs.check-updates.outputs.QQ_version }})" # 使用 QQ 版本号和构建编号作为标题
