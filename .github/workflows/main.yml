@@ -268,6 +268,12 @@ jobs:
       - name: Patch QQ | 修补 QQ
         id: patch_qq
         run: |
+          # 诊断：列出所有 apk 文件及大小
+          echo "::notice::Downloaded APK files | 已下载的 APK 文件"
+          ls -la *.apk 2>/dev/null || echo "::warning::No apk files found | 未找到 apk 文件"
+          echo "--- file sizes ---"
+          du -h *.apk 2>/dev/null || true
+
           # 动态生成模块列表
           module_list=""
           module_args=""
@@ -301,9 +307,10 @@ jobs:
           # 输出到 GITHUB_OUTPUT
           echo "module_list=$module_list" >> $GITHUB_OUTPUT
 
-          # 执行修补（NPatch v1.0.5+ 每个 -m 只接单个模块，需重复 flag）
+          # 执行修补（NPatch v1.0.5+：-m/--embed 每个接单个模块需重复；target apk 放最后）
+          echo "::notice::Running: java -jar npatch.jar $module_args QQ-*.apk -l 2"
           # shellcheck disable=SC2086
-          java -jar npatch.jar QQ-*.apk $module_args -l 2
+          java -jar npatch.jar $module_args QQ-*.apk -l 2
 
       - name: Create Release | 创建 Release
         uses: softprops/action-gh-release@v2
